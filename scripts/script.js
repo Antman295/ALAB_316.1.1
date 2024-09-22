@@ -87,21 +87,41 @@ let topMenuLinks = topMenuEl.querySelectorAll("a");
 topMenuEl.addEventListener('click', e => {
     // The first line of code of the event listener function should call the event object's preventDefault() method.
     e.preventDefault();
+
+
+      // Checking if the clicked element does not have an "active" class (meaning it's inactive)
+      if (!e.target.classList.contains("active")) {
+        // Looping through the menuLinks array
+        menuLinks.forEach((link) => {
+
+          // Caching the link to pass the subLinks array liater
+          let cacheLink = link;
+
+          if (e.target.textContent === link.text) {
+          // Checking if link object has a subLink property to set subMenuEl CSS top property to 100%
+          if (link.subLinks) {
+            subMenuEl.style.top = "100%";
+          } else {
+            subMenuEl.style.top = "0";
+          }
+        }
+        })
+      }
     // The second line of code of the function should immediately return if the element clicked was not an <a> element.
     if (e.target.tagName === 'A') {
-       console.log(e.target.textContent);
 
-       topMenuLinks.forEach((link) => {
-          link.classList.remove("active");
-       });
+      topMenuLinks.forEach((link) => {
+        link.classList.remove("active");
+      });
 
-       e.target.classList.toggle("active");
+      e.target.classList.toggle("active");
+      console.log("Active class toggled for:", e.target.textContent);
+
     }
 
 });
 
-// Another way to check data
 
-topMenuEl.addEventListener('click', (e) => {
-  console.log(e, 'a');
-})
+function buildSubmenu() {
+
+}
