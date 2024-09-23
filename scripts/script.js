@@ -77,7 +77,7 @@ subMenuEl.classList.add(`flex-around`)
 subMenuEl.style.position = 'absolute';
 
 // Set the CSS top property of subMenuEl to the value of 0.
-subMenuEl.style.top = 0;
+// subMenuEl.style.top = 0;
 
 // After updating the menuLinks array:
 // Select and cache the all of the <a> elements inside of topMenuEl in a variable named topMenuLinks.
@@ -85,43 +85,94 @@ let topMenuLinks = topMenuEl.querySelectorAll("a");
 
 // Attach a delegated 'click' event listener to topMenuEl.
 topMenuEl.addEventListener('click', e => {
+
     // The first line of code of the event listener function should call the event object's preventDefault() method.
     e.preventDefault();
-
 
       // Checking if the clicked element does not have an "active" class (meaning it's inactive)
       if (!e.target.classList.contains("active")) {
         // Looping through the menuLinks array
         menuLinks.forEach((link) => {
 
-          // Caching the link to pass the subLinks array liater
-          let cacheLink = link;
-
           if (e.target.textContent === link.text) {
+
+              // If the ABOUT link is clicked, an <h1>About</h1> should be displayed.
+             if (e.target.textContent == "about") {
+            mainEl.innerHTML = `<h1>About</h1>`
+             }
+             
           // Checking if link object has a subLink property to set subMenuEl CSS top property to 100%
           if (link.subLinks) {
+            buildSubmenu(link.subLinks);
             subMenuEl.style.top = "100%";
           } else {
             subMenuEl.style.top = "0";
           }
+
         }
-        })
+        });
       }
+
     // The second line of code of the function should immediately return if the element clicked was not an <a> element.
     if (e.target.tagName === 'A') {
+      console.log(e.target.textContent);
 
       topMenuLinks.forEach((link) => {
         link.classList.remove("active");
       });
 
       e.target.classList.toggle("active");
-      console.log("Active class toggled for:", e.target.textContent);
 
     }
 
 });
 
+  // Attach a delegated 'click' event listener to subMenuEl.
+  subMenuEl.addEventListener('click', e => {
+    
+    // The first line of code of the event listener function should call the event object's preventDefault() method.
+    e.preventDefault();
 
-function buildSubmenu() {
+    // The second line of code within the function should immediately return if the element clicked was not an <a> element.
+    if (e.target.tagName === 'A') {
+
+      // Log the content of the <a> to verify the handler is working.
+      console.log(e.target.textContent);
+
+      // Next, the event listener should set the CSS top property of subMenuEl to 0.
+      subMenuEl.style.top = 0;
+
+      // Remove the active class from each <a> element in topMenuLinks.
+      topMenuLinks.forEach((link) => {
+        link.classList.remove("active");
+      });
+
+      // Update the contents of mainEl, within an <h1>, to the contents of the <a> element clicked within subMenuEl.
+      mainEl.innerHTML = `<h1>${e.target.textContent}</h1>`;
+    }
+  
+  });
+
+// Helper function to make the submenu dynamic based on the clicked link
+function buildSubmenu(subLinks) {
+
+  // To clear and insert submenu items related to their sub link
+  subMenuEl.innerHTML = ' ';
+  
+  subLinks.forEach((link) => {
+
+      // Create an <a> element
+      let newLink = document.createElement('a');
+
+      // Add an href attribute to the <a>, with the value set by the href property of the "link" object.
+      newLink.setAttribute('href', link.href);
+
+      // Set the new element's content to the value of the text property of the "link" object.
+      newLink.textContent = link.text;
+
+      // Append the new element to the topMenuEl element.
+      subMenuEl.appendChild(newLink);
+  })
 
 }
+
